@@ -97,4 +97,5 @@ restart: stop start
 
 clean:
 	@docker-compose down -v --remove-orphans
+	@rm -f docker-compose.override.yml
 	@rm -rf private/* && touch private/.gitkeep
