@@ -10,7 +10,7 @@ Inicializar Poetry:
 make init
 ```
 
-Generar la configuración de la red:
+Generar la configuración de la red (por defecto 5 nodos, configurable con el parámetro `num`):
 
 ```shell
 make blockchain
