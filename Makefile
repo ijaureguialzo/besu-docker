@@ -74,7 +74,7 @@ mostrar_websocat:
 	@scripts/mostrar_websocat $(nodo)
 
 build:
-	@docker compose build --pull
+	@docker compose -f docker-compose.yml -f docker-compose.workspace.yml build --pull
 
 workspace:
 	@docker compose -f docker-compose.yml -f docker-compose.workspace.yml -f docker-compose.override.yml run -q --service-ports --rm workspace /bin/bash
