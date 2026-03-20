@@ -7,6 +7,9 @@ services:
       args:
         - DEBIAN_VERSION=${DEBIAN_VERSION:-latest}
     hostname: workspace
+    networks:
+      besu_network:
+        ipv4_address: 192.168.100.200
     volumes:
       - ./private:/blockchain
       - root_data:/root
@@ -22,8 +25,57 @@ services:
     environment:
       - WS_SECRET=${WS_SECRET:-asdf}
     command: npm start
+    networks:
+      besu_network:
+        ipv4_address: 192.168.100.100
     ports:
       - "3000:3000"
 
+  besu-node1:
+    image: hyperledger/besu:${BESU_VERSION:-26.2.0}
+    hostname: besu-node1
+    volumes:
+      - ./private/jwts:/var/lib/besu/jwts
+      - ./private/networkFiles:/var/lib/besu/QBFT-Network/networkFiles
+      - ./besu:/var/lib/besu/config
+      - ./private/node_data/besu-node1:/var/lib/besu/QBFT-Network/Node
+    command: --config-file=/var/lib/besu/config/node-config.toml
+    networks:
+      besu_network:
+        ipv4_address: 192.168.100.1
+    environment:
+      - BESU_NODE_PRIVATE_KEY_FILE=/var/lib/besu/QBFT-Network/networkFiles/keys/key1
+      - BESU_ETHSTATS=besu-node1:${WS_SECRET:-asdf}@ethstats-server:3000
+      - BESU_RPC_WS_AUTHENTICATION_ENABLED=false
+      - BESU_RPC_WS_AUTHENTICATION_JWT_ALGORITHM=RS256
+      - BESU_RPC_WS_AUTHENTICATION_JWT_PUBLIC_KEY_FILE="/var/lib/besu/jwts/1/publicRSAKeyOperator1.pem"
+
+  besu-node2:
+    image: hyperledger/besu:${BESU_VERSION:-26.2.0}
+    hostname: besu-node2
+    volumes:
+      - ./private/jwts:/var/lib/besu/jwts
+      - ./private/networkFiles:/var/lib/besu/QBFT-Network/networkFiles
+      - ./besu:/var/lib/besu/config
+      - ./private/node_data/besu-node2:/var/lib/besu/QBFT-Network/Node
+    command: --config-file=/var/lib/besu/config/node-config.toml
+    networks:
+      besu_network:
+        ipv4_address: 192.168.100.2
+    environment:
+      - BESU_NODE_PRIVATE_KEY_FILE=/var/lib/besu/QBFT-Network/networkFiles/keys/key2
+      - BESU_ETHSTATS=besu-node2:${WS_SECRET:-asdf}@ethstats-server:3000
+      - BESU_RPC_WS_AUTHENTICATION_ENABLED=false
+      - BESU_RPC_WS_AUTHENTICATION_JWT_ALGORITHM=RS256
+      - BESU_RPC_WS_AUTHENTICATION_JWT_PUBLIC_KEY_FILE="/var/lib/besu/jwts/2/publicRSAKeyOperator2.pem"
+
 volumes:
   root_data:
+
+networks:
+  besu_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.100.0/24
+          gateway: 192.168.100.254
