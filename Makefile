@@ -82,7 +82,7 @@ _urls: _header
 	@echo -----------------------------------------------------
 
 _start-command:
-	@docker-compose up -d --remove-orphans ethstats-server besu-node1 besu-node2
+	@docker-compose up -d --remove-orphans ethstats-server besu-node1 besu-node2 besu-node3 besu-node4 besu-node5
 
 start: _start-command _urls
 

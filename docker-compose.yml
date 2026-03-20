@@ -69,6 +69,63 @@ services:
       - BESU_RPC_WS_AUTHENTICATION_JWT_ALGORITHM=RS256
       - BESU_RPC_WS_AUTHENTICATION_JWT_PUBLIC_KEY_FILE="/var/lib/besu/jwts/2/publicRSAKeyOperator2.pem"
 
+  besu-node3:
+    image: hyperledger/besu:${BESU_VERSION:-26.2.0}
+    hostname: besu-node3
+    volumes:
+      - ./private/jwts:/var/lib/besu/jwts
+      - ./private/networkFiles:/var/lib/besu/QBFT-Network/networkFiles
+      - ./besu:/var/lib/besu/config
+      - ./private/node_data/besu-node3:/var/lib/besu/QBFT-Network/Node
+    command: --config-file=/var/lib/besu/config/node-config.toml
+    networks:
+      besu_network:
+        ipv4_address: 192.168.100.3
+    environment:
+      - BESU_NODE_PRIVATE_KEY_FILE=/var/lib/besu/QBFT-Network/networkFiles/keys/key3
+      - BESU_ETHSTATS=besu-node3:${WS_SECRET:-asdf}@ethstats-server:3000
+      - BESU_RPC_WS_AUTHENTICATION_ENABLED=false
+      - BESU_RPC_WS_AUTHENTICATION_JWT_ALGORITHM=RS256
+      - BESU_RPC_WS_AUTHENTICATION_JWT_PUBLIC_KEY_FILE="/var/lib/besu/jwts/3/publicRSAKeyOperator3.pem"
+
+  besu-node4:
+    image: hyperledger/besu:${BESU_VERSION:-26.2.0}
+    hostname: besu-node4
+    volumes:
+      - ./private/jwts:/var/lib/besu/jwts
+      - ./private/networkFiles:/var/lib/besu/QBFT-Network/networkFiles
+      - ./besu:/var/lib/besu/config
+      - ./private/node_data/besu-node4:/var/lib/besu/QBFT-Network/Node
+    command: --config-file=/var/lib/besu/config/node-config.toml
+    networks:
+      besu_network:
+        ipv4_address: 192.168.100.4
+    environment:
+      - BESU_NODE_PRIVATE_KEY_FILE=/var/lib/besu/QBFT-Network/networkFiles/keys/key4
+      - BESU_ETHSTATS=besu-node4:${WS_SECRET:-asdf}@ethstats-server:3000
+      - BESU_RPC_WS_AUTHENTICATION_ENABLED=false
+      - BESU_RPC_WS_AUTHENTICATION_JWT_ALGORITHM=RS256
+      - BESU_RPC_WS_AUTHENTICATION_JWT_PUBLIC_KEY_FILE="/var/lib/besu/jwts/4/publicRSAKeyOperator4.pem"
+
+  besu-node5:
+    image: hyperledger/besu:${BESU_VERSION:-26.2.0}
+    hostname: besu-node5
+    volumes:
+      - ./private/jwts:/var/lib/besu/jwts
+      - ./private/networkFiles:/var/lib/besu/QBFT-Network/networkFiles
+      - ./besu:/var/lib/besu/config
+      - ./private/node_data/besu-node5:/var/lib/besu/QBFT-Network/Node
+    command: --config-file=/var/lib/besu/config/node-config.toml
+    networks:
+      besu_network:
+        ipv4_address: 192.168.100.5
+    environment:
+      - BESU_NODE_PRIVATE_KEY_FILE=/var/lib/besu/QBFT-Network/networkFiles/keys/key5
+      - BESU_ETHSTATS=besu-node5:${WS_SECRET:-asdf}@ethstats-server:3000
+      - BESU_RPC_WS_AUTHENTICATION_ENABLED=false
+      - BESU_RPC_WS_AUTHENTICATION_JWT_ALGORITHM=RS256
+      - BESU_RPC_WS_AUTHENTICATION_JWT_PUBLIC_KEY_FILE="/var/lib/besu/jwts/5/publicRSAKeyOperator5.pem"
+
 volumes:
   root_data:
 
