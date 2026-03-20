@@ -1,6 +1,7 @@
 #!make
 
 nodo=1
+num=5
 
 help: _header
 	${info }
@@ -14,7 +15,7 @@ help: _header
 	@echo qbft_config
 	@echo generar_config_besu
 	@echo numerar_claves
-	@echo generar_jwts
+	@echo generar_jwts [num=5]
 	@echo generar_accounts_allowlist
 	@echo generar_nodes_allowlist
 	@echo generar_static_nodes
@@ -54,8 +55,7 @@ numerar_claves:
 
 generar_jwts:
 	@mkdir -p private/jwts
-	@cd private/jwts && poetry run python ../../scripts/sortu_JWT.py 1
-	@cd private/jwts && poetry run python ../../scripts/sortu_JWT.py 2
+	@cd private/jwts && for i in {1..$(num)}; do poetry run python ../../scripts/sortu_JWT.py $$i; done
 
 generar_accounts_allowlist:
 	@scripts/generar_accounts_allowlist
