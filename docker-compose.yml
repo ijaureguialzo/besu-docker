@@ -11,5 +11,19 @@ services:
       - ./private:/blockchain
       - root_data:/root
 
+  ethstats-server:
+    image: ethstats-server
+    build:
+      context: docker/ethstats-server
+      dockerfile: Dockerfile
+      args:
+        - NODE_VERSION=${NODE_VERSION:-lts-trixie}
+    hostname: ethstats-server
+    environment:
+      - WS_SECRET=${WS_SECRET:-asdf}
+    command: npm start
+    ports:
+      - "3000:3000"
+
 volumes:
   root_data:
