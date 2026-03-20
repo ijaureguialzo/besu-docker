@@ -15,6 +15,7 @@ help: _header
 	@echo qbft_config
 	@echo generar_config_besu
 	@echo numerar_claves
+	@echo generar_compose [num=5]
 	@echo generar_jwts [num=5]
 	@echo generar_accounts_allowlist
 	@echo generar_nodes_allowlist
@@ -48,7 +49,10 @@ qbft_config:
 generar_config_besu:
 	@besu operator generate-blockchain-config --config-file=private/qbftConfigFile.json --to=private/networkFiles --private-key-file-name=key
 
-blockchain: direcciones qbft_config generar_config_besu numerar_claves generar_jwts generar_accounts_allowlist generar_nodes_allowlist generar_static_nodes
+blockchain: direcciones qbft_config generar_config_besu numerar_claves generar_jwts generar_accounts_allowlist generar_nodes_allowlist generar_static_nodes generar_compose
+
+generar_compose:
+	@poetry run python scripts/generar_compose.py $(num)
 
 numerar_claves:
 	@scripts/numerar_claves
@@ -73,7 +77,7 @@ build:
 	@docker compose build --pull
 
 workspace:
-	@docker compose run -q --service-ports --rm workspace /bin/bash
+	@docker compose -f docker-compose.yml -f docker-compose.workspace.yml -f docker-compose.override.yml run -q --service-ports --rm workspace /bin/bash
 
 _urls: _header
 	${info }
@@ -82,7 +86,7 @@ _urls: _header
 	@echo -----------------------------------------------------
 
 _start-command:
-	@docker-compose up -d --remove-orphans ethstats-server besu-node1 besu-node2 besu-node3 besu-node4 besu-node5
+	@docker compose up -d --remove-orphans
 
 start: _start-command _urls
 
