@@ -47,7 +47,7 @@ qbft_config:
 generar_config_besu:
 	@besu operator generate-blockchain-config --config-file=private/qbftConfigFile.json --to=private/networkFiles --private-key-file-name=key
 
-blockchain: clean direcciones qbft_config generar_config_besu numerar_claves generar_jwts generar_accounts_allowlist generar_nodes_allowlist generar_static_nodes
+blockchain: direcciones qbft_config generar_config_besu numerar_claves generar_jwts generar_accounts_allowlist generar_nodes_allowlist generar_static_nodes
 
 numerar_claves:
 	@scripts/numerar_claves
