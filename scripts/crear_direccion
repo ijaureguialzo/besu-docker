@@ -1,0 +1,4 @@
+#!/bin/sh
+
+besu --data-path="$1" public-key export --to="$1/key.pub"
+besu --data-path="$1" public-key export-address --to="$1/address"

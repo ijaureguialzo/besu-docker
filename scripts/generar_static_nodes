@@ -1,0 +1,67 @@
+#!/bin/sh
+
+# Directorio raíz del proyecto (relativo a la ubicación del script)
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+ROOT_DIR="$(dirname "$SCRIPT_DIR")"
+
+KEYS_DIR="$ROOT_DIR/private/networkFiles/keys"
+OUTPUT_FILE="$ROOT_DIR/private/networkFiles/static-nodes.json"
+
+# Prefijo de IP base (el número de secuencia será el último octeto)
+IP_BASE="192.168.100"
+PORT="30303"
+
+tmpfile=$(mktemp)
+
+for node_dir in "$KEYS_DIR"/0x*/; do
+    [ -d "$node_dir" ] || continue
+
+    # Buscar el fichero con nombre puramente numérico
+    seq_num=""
+    for f in "$node_dir"*; do
+        basename_f=$(basename "$f")
+        case "$basename_f" in
+        *[!0-9]*) continue ;;
+        esac
+        if [ -f "$f" ]; then
+            seq_num="$basename_f"
+            break
+        fi
+    done
+
+    if [ -z "$seq_num" ]; then
+        echo "AVISO: no se encontró fichero de secuencia en $node_dir, se omite." >&2
+        continue
+    fi
+
+    pub_key_file="$node_dir/key.pub"
+    if [ ! -f "$pub_key_file" ]; then
+        echo "AVISO: no se encontró key.pub en $node_dir, se omite." >&2
+        continue
+    fi
+
+    # Leer la clave pública y eliminar el prefijo 0x y espacios en blanco
+    raw_key=$(cat "$pub_key_file" | tr -d '[:space:]')
+    key_hex="${raw_key#0x}"
+
+    echo "$seq_num enode://$key_hex@$IP_BASE.$seq_num:$PORT" >>"$tmpfile"
+done
+
+# Generar el fichero JSON ordenado por número de secuencia
+{
+    printf '[\n'
+    first=1
+    sort -n "$tmpfile" | while IFS=' ' read -r seq_num enode; do
+        if [ $first -eq 1 ]; then
+            first=0
+        else
+            printf ',\n'
+        fi
+        printf '  "%s"' "$enode"
+    done
+    printf '\n]\n'
+} >"$OUTPUT_FILE"
+
+rm -f "$tmpfile"
+
+echo "Fichero generado: $OUTPUT_FILE"

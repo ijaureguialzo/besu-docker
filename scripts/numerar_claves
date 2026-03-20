@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# numerar_claves
+# Recorre private/networkFiles/keys, toma cada subdirectorio con formato 0x...
+# y copia su fichero key al directorio padre con nombre secuencial: key1, key2, key3...
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
+KEYS_DIR="${REPO_ROOT}/private/networkFiles/keys"
+
+if [[ ! -d "${KEYS_DIR}" ]]; then
+    echo "ERROR: No existe el directorio ${KEYS_DIR}" >&2
+    exit 1
+fi
+
+counter=1
+
+# Ordenar subdirectorios con nombre 0x... para garantizar orden determinista
+for dir in $(find "${KEYS_DIR}" -mindepth 1 -maxdepth 1 -type d -name "0x*" | sort); do
+    key_file="${dir}/key"
+
+    if [[ ! -f "${key_file}" ]]; then
+        echo "AVISO: No existe ${key_file}, saltando $(basename "${dir}")" >&2
+        continue
+    fi
+
+    touch "${dir}/${counter}"
+
+    dest="${KEYS_DIR}/key${counter}"
+    cp "${key_file}" "${dest}"
+    echo "$(basename "${dir}") -> key${counter}"
+
+    ((counter++))
+done
+
+echo ""
+echo "Generadas $((counter - 1)) clave(s) en ${KEYS_DIR}"

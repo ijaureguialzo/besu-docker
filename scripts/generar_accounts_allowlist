@@ -1,0 +1,43 @@
+#!/bin/sh
+
+# Directorio raíz del proyecto (relativo a la ubicación del script)
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+ROOT_DIR="$(dirname "$SCRIPT_DIR")"
+
+OUTPUT_FILE="$ROOT_DIR/private/networkFiles/accounts_permissions_config.toml"
+
+# Recoger todas las direcciones
+addresses=""
+
+# 1. Leer los ficheros private/direcciones/*/address
+for addr_file in "$ROOT_DIR"/private/direcciones/*/address; do
+    if [ -f "$addr_file" ]; then
+        addr=$(cat "$addr_file" | tr -d '[:space:]')
+        addresses="$addresses $addr"
+    fi
+done
+
+# 2. Leer los nombres de directorios 0x* en private/networkFiles/keys
+for dir in "$ROOT_DIR"/private/networkFiles/keys/0x*/; do
+    if [ -d "$dir" ]; then
+        addr=$(basename "$dir")
+        addresses="$addresses $addr"
+    fi
+done
+
+# Generar el fichero TOML
+{
+    printf 'accounts-allowlist = [\n'
+    first=1
+    for addr in $addresses; do
+        if [ $first -eq 1 ]; then
+            first=0
+        else
+            printf ',\n'
+        fi
+        printf '    "%s"' "$addr"
+    done
+    printf '\n]\n'
+} >"$OUTPUT_FILE"
+
+echo "Fichero generado: $OUTPUT_FILE"

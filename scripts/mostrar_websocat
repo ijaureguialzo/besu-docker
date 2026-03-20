@@ -1,0 +1,31 @@
+#!/bin/sh
+
+# Directorio raíz del proyecto (relativo a la ubicación del script)
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+ROOT_DIR="$(dirname "$SCRIPT_DIR")"
+
+# Comprobación del parámetro
+if [ -z "$1" ]; then
+    echo "Uso: $(basename "$0") <número_de_nodo>" >&2
+    echo "Ejemplo: $(basename "$0") 1" >&2
+    exit 1
+fi
+
+NODE_ID="$1"
+
+# Prefijo de IP base
+IP_BASE="192.168.100"
+PORT="8546"
+
+# Ruta del fichero JWT
+JWT_FILE="$ROOT_DIR/private/jwts/$NODE_ID/JWT_$NODE_ID"
+
+if [ ! -f "$JWT_FILE" ]; then
+    echo "Error: no se encontró el fichero JWT: $JWT_FILE" >&2
+    exit 1
+fi
+
+TOKEN=$(cat "$JWT_FILE" | tr -d '[:space:]')
+
+printf './websocat -H="Authorization: Bearer %s" ws://%s.%s:%s\n' \
+    "$TOKEN" "$IP_BASE" "$NODE_ID" "$PORT"
