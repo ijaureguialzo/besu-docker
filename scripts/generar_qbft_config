@@ -1,13 +1,18 @@
 #!/usr/bin/env bash
-# generar_alloc
+# generar_qbft_config
 # Recorre el directorio private, lee los ficheros address y key de cada
 # subdirectorio y genera private/qbftConfigFile.json a partir de la plantilla
 # templates/qbftConfigFile.json, añadiendo entradas en la clave "alloc".
+# Uso: generar_qbft_config [num_nodos]
+#   num_nodos: número de nodos validadores (por defecto: 5)
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
+# Número de nodos: primer argumento o valor por defecto
+NUM_NODES="${1:-5}"
 
 TEMPLATE="${REPO_ROOT}/templates/qbftConfigFile.json"
 PRIVATE_DIR="${REPO_ROOT}/private"
@@ -29,6 +34,12 @@ fi
 
 # Partir de la plantilla (con alloc vacío)
 cp "${TEMPLATE}" "${OUTPUT}"
+
+# Actualizar blockchain.nodes.count con el número de nodos recibido
+OUTPUT_TMP="$(mktemp)"
+jq --argjson n "${NUM_NODES}" '.blockchain.nodes.count = $n' "${OUTPUT}" >"${OUTPUT_TMP}"
+mv "${OUTPUT_TMP}" "${OUTPUT}"
+echo "blockchain.nodes.count establecido a ${NUM_NODES}"
 
 # Recorrer subdirectorios de private/direcciones/
 for dir in "${DIRECCIONES_DIR}"/*/; do

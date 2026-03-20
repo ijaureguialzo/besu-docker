@@ -9,7 +9,7 @@ help: _header
 	@echo -----------------------
 	@echo init
 	@echo -----------------------
-	@echo blockchain
+	@echo blockchain [num=5]
 	@echo -----------------------
 	@echo direcciones
 	@echo qbft_config
@@ -44,7 +44,7 @@ direcciones:
 	@scripts/crear_direccion private/direcciones/direccion_3
 
 qbft_config:
-	@scripts/generar_qbft_config
+	@scripts/generar_qbft_config $(num)
 
 generar_config_besu:
 	@besu operator generate-blockchain-config --config-file=private/qbftConfigFile.json --to=private/networkFiles --private-key-file-name=key
