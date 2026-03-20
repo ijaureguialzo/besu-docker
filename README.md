@@ -10,6 +10,12 @@ Inicializar Poetry:
 make init
 ```
 
+Construir los contenedores:
+
+```shell
+make build
+```
+
 Generar la configuración de la red (por defecto 5 nodos, configurable con el parámetro `num`):
 
 ```shell
