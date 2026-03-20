@@ -6,6 +6,8 @@ help: _header
 	${info }
 	@echo Opciones:
 	@echo -----------------------
+	@echo init
+	@echo -----------------------
 	@echo blockchain
 	@echo -----------------------
 	@echo direcciones
@@ -30,6 +32,9 @@ _header:
 	@echo ----
 	@echo Besu
 	@echo ----
+
+init:
+	@poetry install
 
 direcciones:
 	@scripts/crear_direccion private/direcciones/direccion_1
