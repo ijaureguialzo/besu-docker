@@ -1,0 +1,15 @@
+services:
+  workspace:
+    image: workspace
+    build:
+      context: docker/workspace
+      dockerfile: Dockerfile
+      args:
+        - DEBIAN_VERSION=${DEBIAN_VERSION:-latest}
+    hostname: workspace
+    volumes:
+      - ./private:/blockchain
+      - root_data:/root
+
+volumes:
+  root_data:

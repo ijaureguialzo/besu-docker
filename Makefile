@@ -21,6 +21,9 @@ help: _header
 	@echo -----------------------
 	@echo clean
 	@echo -----------------------
+	@echo build
+	@echo workspace
+	@echo -----------------------
 
 _header:
 	@echo ----
@@ -62,3 +65,9 @@ generar_static_nodes:
 
 mostrar_websocat:
 	@scripts/mostrar_websocat $(nodo)
+
+build:
+	@docker compose build --pull
+
+workspace:
+	@docker compose run -q --service-ports --rm workspace /bin/bash
