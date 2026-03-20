@@ -27,5 +27,5 @@ fi
 
 TOKEN=$(cat "$JWT_FILE" | tr -d '[:space:]')
 
-printf './websocat -H="Authorization: Bearer %s" ws://%s.%s:%s\n' \
+printf 'websocat -H="Authorization: Bearer %s" ws://%s.%s:%s\n' \
     "$TOKEN" "$IP_BASE" "$NODE_ID" "$PORT"
