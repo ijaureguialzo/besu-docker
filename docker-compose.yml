@@ -46,9 +46,9 @@ services:
     environment:
       - BESU_NODE_PRIVATE_KEY_FILE=/var/lib/besu/QBFT-Network/networkFiles/keys/key1
       - BESU_ETHSTATS=besu-node1:${WS_SECRET:-asdf}@ethstats-server:3000
-      - BESU_RPC_WS_AUTHENTICATION_ENABLED=false
+      - BESU_RPC_WS_AUTHENTICATION_ENABLED=true
       - BESU_RPC_WS_AUTHENTICATION_JWT_ALGORITHM=RS256
-      - BESU_RPC_WS_AUTHENTICATION_JWT_PUBLIC_KEY_FILE="/var/lib/besu/jwts/1/publicRSAKeyOperator1.pem"
+      - BESU_RPC_WS_AUTHENTICATION_JWT_PUBLIC_KEY_FILE=/var/lib/besu/jwts/1/publicRSAKeyOperator1.pem
 
   besu-node2:
     image: hyperledger/besu:${BESU_VERSION:-26.2.0}
@@ -65,9 +65,9 @@ services:
     environment:
       - BESU_NODE_PRIVATE_KEY_FILE=/var/lib/besu/QBFT-Network/networkFiles/keys/key2
       - BESU_ETHSTATS=besu-node2:${WS_SECRET:-asdf}@ethstats-server:3000
-      - BESU_RPC_WS_AUTHENTICATION_ENABLED=false
+      - BESU_RPC_WS_AUTHENTICATION_ENABLED=true
       - BESU_RPC_WS_AUTHENTICATION_JWT_ALGORITHM=RS256
-      - BESU_RPC_WS_AUTHENTICATION_JWT_PUBLIC_KEY_FILE="/var/lib/besu/jwts/2/publicRSAKeyOperator2.pem"
+      - BESU_RPC_WS_AUTHENTICATION_JWT_PUBLIC_KEY_FILE=/var/lib/besu/jwts/2/publicRSAKeyOperator2.pem
 
   besu-node3:
     image: hyperledger/besu:${BESU_VERSION:-26.2.0}
@@ -84,9 +84,9 @@ services:
     environment:
       - BESU_NODE_PRIVATE_KEY_FILE=/var/lib/besu/QBFT-Network/networkFiles/keys/key3
       - BESU_ETHSTATS=besu-node3:${WS_SECRET:-asdf}@ethstats-server:3000
-      - BESU_RPC_WS_AUTHENTICATION_ENABLED=false
+      - BESU_RPC_WS_AUTHENTICATION_ENABLED=true
       - BESU_RPC_WS_AUTHENTICATION_JWT_ALGORITHM=RS256
-      - BESU_RPC_WS_AUTHENTICATION_JWT_PUBLIC_KEY_FILE="/var/lib/besu/jwts/3/publicRSAKeyOperator3.pem"
+      - BESU_RPC_WS_AUTHENTICATION_JWT_PUBLIC_KEY_FILE=/var/lib/besu/jwts/3/publicRSAKeyOperator3.pem
 
   besu-node4:
     image: hyperledger/besu:${BESU_VERSION:-26.2.0}
@@ -103,9 +103,9 @@ services:
     environment:
       - BESU_NODE_PRIVATE_KEY_FILE=/var/lib/besu/QBFT-Network/networkFiles/keys/key4
       - BESU_ETHSTATS=besu-node4:${WS_SECRET:-asdf}@ethstats-server:3000
-      - BESU_RPC_WS_AUTHENTICATION_ENABLED=false
+      - BESU_RPC_WS_AUTHENTICATION_ENABLED=true
       - BESU_RPC_WS_AUTHENTICATION_JWT_ALGORITHM=RS256
-      - BESU_RPC_WS_AUTHENTICATION_JWT_PUBLIC_KEY_FILE="/var/lib/besu/jwts/4/publicRSAKeyOperator4.pem"
+      - BESU_RPC_WS_AUTHENTICATION_JWT_PUBLIC_KEY_FILE=/var/lib/besu/jwts/4/publicRSAKeyOperator4.pem
 
   besu-node5:
     image: hyperledger/besu:${BESU_VERSION:-26.2.0}
@@ -122,9 +122,9 @@ services:
     environment:
       - BESU_NODE_PRIVATE_KEY_FILE=/var/lib/besu/QBFT-Network/networkFiles/keys/key5
       - BESU_ETHSTATS=besu-node5:${WS_SECRET:-asdf}@ethstats-server:3000
-      - BESU_RPC_WS_AUTHENTICATION_ENABLED=false
+      - BESU_RPC_WS_AUTHENTICATION_ENABLED=true
       - BESU_RPC_WS_AUTHENTICATION_JWT_ALGORITHM=RS256
-      - BESU_RPC_WS_AUTHENTICATION_JWT_PUBLIC_KEY_FILE="/var/lib/besu/jwts/5/publicRSAKeyOperator5.pem"
+      - BESU_RPC_WS_AUTHENTICATION_JWT_PUBLIC_KEY_FILE=/var/lib/besu/jwts/5/publicRSAKeyOperator5.pem
 
 volumes:
   root_data:
